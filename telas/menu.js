@@ -7,17 +7,21 @@ import imgMenu from '../assets/wallet.png';
 export default function Menu() {
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>SysREP</Text>
-      <Image source={imgMenu} style={{width: 100, height: 100, marginBottom: 10, marginTop: 25}}/>
-      <TouchableOpacity style={styles.botao}>
-        <Text style={styles.botaoTexto}>Despesas</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.botao}>
-        <Text style={styles.botaoTexto}>Receita</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.botao}>
-        <Text style={styles.botaoTexto}>Membros</Text>
-      </TouchableOpacity>
+      <View>
+        <Text style={styles.titulo}>SysREP</Text>
+        <Image source={imgMenu} style={{width: 100, height: 100, marginTop: 25}}/>
+      </View>
+      <View style={styles.botaoContainer}>
+        <TouchableOpacity style={styles.botao}>
+          <Text style={styles.botaoTexto}>Despesas</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.botao}>
+          <Text style={styles.botaoTexto}>Receita</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.botao}>
+          <Text style={styles.botaoTexto}>Membros</Text>
+        </TouchableOpacity>
+        </View>
     </View>
   );
 }
@@ -27,20 +31,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
   },
   botao: {
     width: 200,
-    height: 40,
+    height: 50,
     backgroundColor: '#000',
     marginTop: 25,
-    textAlign: 'center',
-    borderRadius: 8,
+    borderRadius: 4,
     justifyContent: 'center',
   },
   botaoTexto: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
+    textAlign: 'center',
   },
   titulo:{
     fontSize: 28,
