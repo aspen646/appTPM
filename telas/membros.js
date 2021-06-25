@@ -1,9 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
+import { Header } from '../components/Header';
+
+
 export default function Membros() {
+
   return (
     <View style={styles.container}>
+      <Header texto="Membros"/>
       <Text style={styles.titulo}>membros</Text>
     </View>
   );
@@ -12,7 +17,7 @@ export default function Membros() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#313131',
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
@@ -30,6 +35,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   titulo:{
+    color: '#F0F0F5',
     fontSize: 28,
     fontWeight: 'bold',
   }

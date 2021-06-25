@@ -31,24 +31,25 @@ export default function Menu() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#313131',
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
   botao: {
     width: 200,
     height: 50,
-    backgroundColor: '#000',
+    backgroundColor: '#EC625F',
     marginTop: 25,
     borderRadius: 4,
     justifyContent: 'center',
   },
   botaoTexto: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
   },
   titulo:{
+    color: '#F0F0F5',
     fontSize: 28,
     fontWeight: 'bold',
   }
