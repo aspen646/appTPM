@@ -1,10 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import imgMenu from '../assets/wallet.png';
 
 export default function Menu() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View>
@@ -12,13 +14,13 @@ export default function Menu() {
         <Image source={imgMenu} style={{width: 100, height: 100, marginTop: 25}}/>
       </View>
       <View style={styles.botaoContainer}>
-        <TouchableOpacity style={styles.botao}>
+        <TouchableOpacity style={styles.botao} onPress={() => {navigation.navigate('Despesas')}}>
           <Text style={styles.botaoTexto}>Despesas</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botao}>
+        <TouchableOpacity style={styles.botao} onPress={() => {navigation.navigate('Receita')}}>
           <Text style={styles.botaoTexto}>Receita</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.botao}>
+        <TouchableOpacity style={styles.botao} onPress={() => {navigation.navigate('Membros')}}>
           <Text style={styles.botaoTexto}>Membros</Text>
         </TouchableOpacity>
         </View>
