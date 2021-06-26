@@ -8,14 +8,12 @@ export function Header({ texto }) {
   const navigation = useNavigation();
 
   return (
-
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Feather name="arrow-left" size={28} color="#f0f0f5" />
         </TouchableOpacity>
         <Text style={styles.titulo}>{texto}</Text>
       </View>
-
   );
 }
 

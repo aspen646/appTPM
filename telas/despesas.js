@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
+
 import { Header } from '../components/Header';
 
 export default function Despesas() {
-
   return (
     <View style={styles.container}>
       <Header texto="Despesas"/>
