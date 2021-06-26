@@ -14,10 +14,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Receita" component={Receita}/>  
         <Stack.Screen name="Menu" component={Menu}/>  
         <Stack.Screen name="Despesas" component={Despesas}/>  
         <Stack.Screen name="Membros" component={Membros}/>  
-        <Stack.Screen name="Receita" component={Receita}/>  
       </Stack.Navigator>
     </NavigationContainer>
   );
