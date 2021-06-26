@@ -1,21 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput,ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView, SafeAreaView} from 'react-native';
 import { Header } from '../components/Header';
 
 
 export default function Receita() {
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header texto="Receita" />
-      <ScrollView horizontal={false} style={styles.conteudo}>
+      <View style={styles.conteudo}>
         <TextInput style={styles.input} placeholder="Nome da Receita" />
         <TextInput style={styles.input} placeholder="Valor R$" />
-        <TouchableOpacity style={styles.botao} onPress={() => {}}>
+        <TouchableOpacity style={styles.botao} onPress={() => { }}>
           <Text style={styles.botaoTexto}>Salvar</Text>
         </TouchableOpacity>
-      </ScrollView>
-    </View>
+      </View>
+      <View>
+        <ScrollView>
+       
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -25,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#313131',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+
   },
   titulo: {
     color: '#F0F0F5',
@@ -57,7 +63,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
-  }
+  },
+
+  scrollView: {
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
+  },
+
 }
 
 );
