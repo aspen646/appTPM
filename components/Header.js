@@ -19,13 +19,12 @@ export function Header({ texto }) {
 
 const styles = StyleSheet.create({
   header: {
-    top: 0,
-    zIndex:9999,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor:'#313131',
     width: '100%',
+    height: 100,
 
     paddingTop: Constants.statusBarHeight + 5,
     paddingLeft: 15,

@@ -6,19 +6,30 @@ import { Header } from '../components/Header';
 
 export default function Despesas() {
   return (
-    <View style={styles.container}>
+    <View style={styles.wrapper}>
       <Header texto="Despesas"/>
-      <Text style={styles.titulo}>DESPESAS</Text> 
+      <View style={styles.container}>
+        <View style={styles.body}>
+          <Text style={styles.titulo}>DESPESAS</Text> 
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    
+  },
   container: {
     flex: 1,
-    backgroundColor: '#313131',
+    backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+  },
+  body: {
+    flex: 1,
+    backgroundColor: 'red',
   },
   titulo:{
     color: '#F0F0F5',
