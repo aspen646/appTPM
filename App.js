@@ -1,12 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Menu from './telas/menu';
-import Membros from './telas/membros';
-import Despesas from './telas/despesas';
-import Receita from './telas/receita';
+import Menu from './src/telas/menu';
+import Membros from './src/telas/membros';
+import Despesas from './src/telas/despesas';
+import Receita from './src/telas/receita';
 
 const Stack = createStackNavigator();
 

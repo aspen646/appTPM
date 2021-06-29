@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   botao: {
-    width: 200,
-    height: 50,
+    width: 240,
+    height: 55,
     backgroundColor: '#EC625F',
     marginTop: 25,
     borderRadius: 4,

@@ -23,12 +23,23 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor:'#313131',
-    width: '100%',
-    height: 100,
+    // width: '100%',
+    // height: 100,
 
     paddingTop: Constants.statusBarHeight + 5,
     paddingLeft: 15,
-    paddingBottom: 25
+    paddingBottom: 12,
+    marginBottom: 30,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+
+    elevation: 7,
 
   },
   titulo: {
