@@ -1,27 +1,49 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Header } from '../components/Header';
+import api from '../services/api';
 
 
 export default function Membros() {
+  const navigation = useNavigation();
+  const [membros, setMembros] = useState([]);
 
-//   function ListaComponent(props){
+  useEffect(() =>{
+    const loadonscreen = navigation.addListener('focus', () => {
+      loadApiContent();
+        });
+    
+    return loadonscreen;
+  },[navigation]);
+
+async function loadApiContent(){
+
+  api.get(`membros`)
+  .then((response) => {
+
+    setMembros(response.data);
+    console.log(response.data);
+
+  })
+  .catch((e) => {
+      if(!e.response){
+        return Alert.alert('Erro');
+      }
+      return Alert.alert('Erro', e.response.data.erro);
+  });
+  console.log(membros[0]);
+}
+
+function ListaComponent(props){
   
-//   return(
-//       <View>
-//           <TouchableOpacity onPress={() => {}}>
-//               <View>
-//                   <Text>Despesa</Text>
-//                   <Text>{'Internet'}</Text>
-
-//                   <Text>Valor</Text>
-//                   <Text>{'100,00'}</Text>
-//               </View>
-//               <Feather name="info" size={28} color="#EB708A"/>
-//           </TouchableOpacity>
-//       </View>
-//   );
-// }
+  return(
+      <View style={styles.listaHeader}>
+        <Text style={styles.listaTexto}>{props.value.nome}</Text>
+        <Text style={styles.listaTexto}>{props.value.telefone}</Text>
+    </View>
+  );
+}
 
 
   return (
@@ -34,29 +56,17 @@ export default function Membros() {
               <Text style={styles.listaTexto}>Membro</Text>
               <Text style={styles.listaTexto}>Telefone</Text>
             </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Arthur Henrique</Text>
-              <Text style={styles.listaTexto}>(33) 9 8721-0300</Text>
-            </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Wesley Gomes</Text>
-              <Text style={styles.listaTexto}>(33) 9 8422-1239</Text>
-            </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Saulo José</Text>
-              <Text style={styles.listaTexto}>(33) 9 9352-4118</Text>
-            </View>
-            {/* <FlatList
-                //data={clientes}
-                ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma receita.</Text>}
+            <FlatList
+                data={membros}
+                ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhum membro.</Text>}
                 //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 //onEndReached={loadClientes}
                 //onEndReachedThreshold={0.2}            
                 //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
-                //keyExtractor={clientes => String(clientes.idCliente)}
+                keyExtractor={membros => String(membros.id)}
                 renderItem={()=>(
-                    <ListaComponent/>
-                )}/>  */}
+                    <ListaComponent value={membros}/>
+                )}/> 
         
         </View>
   </View>
@@ -131,3 +141,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
   }
 });
+
+
