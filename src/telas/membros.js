@@ -10,12 +10,17 @@ export default function Membros() {
   const [membros, setMembros] = useState([]);
 
   useEffect(() =>{
-    const loadonscreen = navigation.addListener('focus', () => {
       loadApiContent();
-        });
+
+  },[]);
+
+  // useEffect(() =>{
+  //   const loadonscreen = navigation.addListener('focus', () => {
+  //     loadApiContent();
+  //       });
     
-    return loadonscreen;
-  },[navigation]);
+  //   return loadonscreen;
+  // },[navigation]);
 
 async function loadApiContent(){
 
@@ -27,6 +32,7 @@ async function loadApiContent(){
 
   })
   .catch((e) => {
+    console.log(e);
       if(!e.response){
         return Alert.alert('Erro');
       }
@@ -48,7 +54,7 @@ function ListaComponent(props){
 
   return (
   <View style={styles.wrapper}>
-      <Header texto="Receita" />
+      <Header texto="Membros" />
       <View style={styles.container}>
         <View style={styles.conteudo}>
         </View>
