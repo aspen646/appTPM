@@ -14,21 +14,20 @@ export default function Membros() {
 
   },[]);
 
-  // useEffect(() =>{
-  //   const loadonscreen = navigation.addListener('focus', () => {
-  //     loadApiContent();
-  //       });
-    
-  //   return loadonscreen;
-  // },[navigation]);
-
 async function loadApiContent(){
 
   api.get(`membros`)
   .then((response) => {
 
-    setMembros(response.data);
+    let newArr = [];
+    newArr.push(... membros);
+    newArr.push(... response.data);
+
+    setMembros(newArr);
+
+    // setMembros(response.data);
     console.log(response.data);
+    console.log(membros);
 
   })
   .catch((e) => {
@@ -38,7 +37,6 @@ async function loadApiContent(){
       }
       return Alert.alert('Erro', e.response.data.erro);
   });
-  console.log(membros[0]);
 }
 
 function ListaComponent(props){
