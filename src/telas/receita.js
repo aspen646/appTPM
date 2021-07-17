@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, SafeAreaView, FlatList} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Alert, FlatList} from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import { Header } from '../components/Header';
-
+import api from '../services/api';
 
 export default function Receita() {
   const [real, setReal] = useState("");
+  const [receita, setReceita] = useState();
 
 //   function ListaComponent(props){
   
@@ -25,6 +26,39 @@ export default function Receita() {
 //   );
 // }
 
+useEffect(() =>{
+  loadApiContent();
+},[]);
+
+async function loadApiContent(){
+let dataResponse = [];
+api.get(
+  `receita`,
+)
+.then((response) => {
+  response.data.filter((item) => {
+    dataResponse.push(item);    
+  });
+  setReceita(dataResponse)
+ 
+})
+.catch((e) => {
+  console.log(e);
+    if(!e.response){
+      return Alert.alert('Erro');
+    }
+    return Alert.alert('Erro', e.response.data.erro);
+});
+}
+
+function ListaComponent({...props}){
+  return(
+      <View style={styles.listaHeader}>
+        <Text style={styles.listaTexto}>{props && props.data.nome}</Text>
+        <Text style={styles.listaTexto}>{props && props.data.valor}</Text>
+    </View>
+  );
+}
 
   return (
   <View style={styles.wrapper}>
@@ -57,29 +91,18 @@ export default function Receita() {
               <Text style={styles.listaTexto}>Receitas</Text>
               <Text style={styles.listaTexto}>R$</Text>
             </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Internet</Text>
-              <Text style={styles.listaTexto}>R$ 100,00</Text>
-            </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Energia</Text>
-              <Text style={styles.listaTexto}>R$ 20,00 </Text>
-            </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Óleo</Text>
-              <Text style={styles.listaTexto}>R$ 7,49</Text>
-            </View>
-            {/* <FlatList
-                //data={clientes}
-                ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma receita.</Text>}
-                //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
-                //onEndReached={loadClientes}
-                //onEndReachedThreshold={0.2}            
-                //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
-                //keyExtractor={clientes => String(clientes.idCliente)}
-                renderItem={()=>(
-                    <ListaComponent/>
-                )}/>  */}
+            {receita &&
+                <FlatList
+                    data={receita}
+                    ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma receita.</Text>}
+                    //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+                    //onEndReached={loadClientes}
+                    //onEndReachedThreshold={0.2}            
+                    //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
+                    keyExtractor={receita => String(receita.id)}
+                    renderItem={({ item } ) => <ListaComponent data={item} />} 
+                />
+              }
         
         </View>
   </View>

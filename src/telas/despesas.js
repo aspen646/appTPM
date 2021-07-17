@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
+import api from '../services/api';
 
 
 import { Header } from '../components/Header';
 
 export default function Despesas() {
   const [real, setReal] = useState("");
+  const [nome, setNome] = useState("");
+  const [despesas, setDespesas] = useState();
 
   //   function ListaComponent(props){
     
@@ -25,14 +28,81 @@ export default function Despesas() {
   //       </View>
   //   );
   // }
+
   
+
+  useEffect(() =>{
+    loadApiContent();
+  },[]);
+
+async function loadApiContent(){
+  let dataResponse = [];
+  api.get(
+    `despesas`,
+  )
+  .then((response) => {
+    response.data.filter((item) => {
+      dataResponse.push(item);    
+    });
+    setDespesas(dataResponse)
+   
+  })
+  .catch((e) => {
+    console.log(e);
+      if(!e.response){
+        return Alert.alert('Erro');
+      }
+      return Alert.alert('Erro', e.response.data.erro);
+  });
+}
+
+async function sendApiContent(){
+  let toApi = {
+    nome : nome,
+    real : real
+  };
+
+  api.post(`despesas/cadastro/`,toApi)
+  .then(() =>{
+      setFormSender({
+          nome: "",
+          valor: ""
+      });
+      return Alert.alert('Sucesso','Despesa adicionada.');
+  })
+  // .catch((e) => {
+  //     setLoadBtn(false);
+  //     if(!e.response){
+  //         return Alert.alert('Ops','Ocorreu um erro de conexão (ツ)_/¯');
+  //     }
+  //     if(!e.response.data.erro)
+  //         return Alert.alert(e.response.data.error, e.response.data.message);
+  //     else
+  //         return Alert.alert('Erro',e.response.data.erro);
+  // });
+}
+  
+function ListaComponent({...props}){
+  return(
+      <View style={styles.listaHeader}>
+        <Text style={styles.listaTexto}>{props && props.data.nome}</Text>
+        <Text style={styles.listaTexto}>{props && props.data.valor}</Text>
+    </View>
+  );
+}
+
   
     return (
     <View style={styles.wrapper}>
         <Header texto="Despesas" />
         <View style={styles.container}>
           <View style={styles.conteudo}>
-            <TextInput placeholderTextColor="#999" style={styles.input} placeholder="Despesa" />
+            <TextInput 
+            value={nome}
+            onChangeText={(text => setNome(text))}
+            placeholderTextColor="#999" 
+            style={styles.input} 
+            placeholder="Despesa" />
             <TextInputMask
                 type={'money'}
                 options={{
@@ -50,7 +120,7 @@ export default function Despesas() {
                 keyboardType='decimal-pad'
                 style={styles.input}
                 />
-            <TouchableOpacity style={styles.botao} onPress={() => { }}>
+            <TouchableOpacity style={styles.botao} onPress={() => { sendApiContent }}>
               <Text style={styles.botaoTexto}>Salvar</Text>
             </TouchableOpacity>
           </View>
@@ -58,29 +128,18 @@ export default function Despesas() {
                 <Text style={styles.listaTexto}>Despesas</Text>
                 <Text style={styles.listaTexto}>R$</Text>
               </View>
-              <View style={styles.listaHeader}>
-                <Text style={styles.listaTexto}>Internet</Text>
-                <Text style={styles.listaTexto}>R$ 100,00</Text>
-              </View>
-              <View style={styles.listaHeader}>
-                <Text style={styles.listaTexto}>Energia</Text>
-                <Text style={styles.listaTexto}>R$ 20,00 </Text>
-              </View>
-              <View style={styles.listaHeader}>
-                <Text style={styles.listaTexto}>Óleo</Text>
-                <Text style={styles.listaTexto}>R$ 7,49</Text>
-              </View>
-              {/* <FlatList
-                  //data={clientes}
-                  ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma receita.</Text>}
-                  //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
-                  //onEndReached={loadClientes}
-                  //onEndReachedThreshold={0.2}            
-                  //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
-                  //keyExtractor={clientes => String(clientes.idCliente)}
-                  renderItem={()=>(
-                      <ListaComponent/>
-                  )}/>  */}
+              {despesas &&
+                <FlatList
+                    data={despesas}
+                    ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma receita.</Text>}
+                    //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+                    //onEndReached={loadClientes}
+                    //onEndReachedThreshold={0.2}            
+                    //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
+                    keyExtractor={despesas => String(despesas.id)}
+                    renderItem={({ item } ) => <ListaComponent data={item} />} 
+                />
+              }
           
           </View>
     </View>
