@@ -7,28 +7,23 @@ import api from '../services/api';
 
 export default function Membros() {
   const navigation = useNavigation();
-  const [membros, setMembros] = useState([]);
+  const [membros, setMembros] = useState();
 
   useEffect(() =>{
-      loadApiContent();
-
+    loadApiContent();
   },[]);
 
 async function loadApiContent(){
-
-  api.get(`membros`)
+  let dataResponse = [];
+  api.get(
+    `membros`,
+  )
   .then((response) => {
-
-    let newArr = [];
-    newArr.push(... membros);
-    newArr.push(... response.data);
-
-    setMembros(newArr);
-
-    // setMembros(response.data);
-    console.log(response.data);
-    console.log(membros);
-
+    response.data.filter((item) => {
+      dataResponse.push(item);    
+    });
+    setMembros(dataResponse)
+   
   })
   .catch((e) => {
     console.log(e);
@@ -39,41 +34,39 @@ async function loadApiContent(){
   });
 }
 
-function ListaComponent(props){
-  
+function ListaComponent({...props}){
   return(
       <View style={styles.listaHeader}>
-        <Text style={styles.listaTexto}>{props.value.nome}</Text>
-        <Text style={styles.listaTexto}>{props.value.telefone}</Text>
+        <Text style={styles.listaTexto}>{props && props.data.nome}</Text>
+        <Text style={styles.listaTexto}>{props && props.data.telefone}</Text>
     </View>
   );
 }
 
 
   return (
-  <View style={styles.wrapper}>
+    <View style={styles.wrapper}>
       <Header texto="Membros" />
       <View style={styles.container}>
-        <View style={styles.conteudo}>
+        <View style={styles.conteudo} />
+        <View style={styles.listaHeader}>
+          <Text style={styles.listaTexto}>Membro</Text>
+          <Text style={styles.listaTexto}>Telefone</Text>
         </View>
-            <View style={styles.listaHeader}>
-              <Text style={styles.listaTexto}>Membro</Text>
-              <Text style={styles.listaTexto}>Telefone</Text>
-            </View>
-            <FlatList
-                data={membros}
-                ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhum membro.</Text>}
-                //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
-                //onEndReached={loadClientes}
-                //onEndReachedThreshold={0.2}            
-                //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
-                keyExtractor={membros => String(membros.id)}
-                renderItem={()=>(
-                    <ListaComponent value={membros}/>
-                )}/> 
-        
-        </View>
-  </View>
+        {membros &&
+          <FlatList
+              data={membros}
+              ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhum membro.</Text>}
+              //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+              //onEndReached={loadClientes}
+              //onEndReachedThreshold={0.2}            
+              //ListFooterComponent={<RenderFooter value={loading} refreshing={refreshing}/>}
+              keyExtractor={membros => String(membros.id)}
+              renderItem={({ item } ) => <ListaComponent data={item} />} 
+          />
+        }
+      </View>
+    </View>
   );
 }
 
