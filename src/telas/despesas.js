@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import api from '../services/api';
 
@@ -9,6 +9,8 @@ import { Header } from '../components/Header';
 export default function Despesas() {
   const [real, setReal] = useState("");
   const [nome, setNome] = useState("");
+  const [handleReload, setHandleReload] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [despesas, setDespesas] = useState();
 
   //   function ListaComponent(props){
@@ -33,7 +35,7 @@ export default function Despesas() {
 
   useEffect(() =>{
     loadApiContent();
-  },[]);
+  },[handleReload]);
 
 async function loadApiContent(){
   let dataResponse = [];
@@ -57,29 +59,28 @@ async function loadApiContent(){
 }
 
 async function sendApiContent(){
+  if(loading){
+    return;
+  }
+
+  if(nome == "" || real == ""){
+    return;
+  }
+
+  setLoading(true);
+
   let toApi = {
     nome : nome,
-    real : real
+    valor : real
   };
 
   api.post(`despesas/cadastro/`,toApi)
   .then(() =>{
-      setFormSender({
-          nome: "",
-          valor: ""
-      });
-      return Alert.alert('Sucesso','Despesa adicionada.');
+      setNome('');
+      setReal('');
+      setHandleReload(handleReload? false : true);
+      setLoading(false);
   })
-  // .catch((e) => {
-  //     setLoadBtn(false);
-  //     if(!e.response){
-  //         return Alert.alert('Ops','Ocorreu um erro de conexão (ツ)_/¯');
-  //     }
-  //     if(!e.response.data.erro)
-  //         return Alert.alert(e.response.data.error, e.response.data.message);
-  //     else
-  //         return Alert.alert('Erro',e.response.data.erro);
-  // });
 }
   
 function ListaComponent({...props}){
@@ -120,9 +121,17 @@ function ListaComponent({...props}){
                 keyboardType='decimal-pad'
                 style={styles.input}
                 />
-            <TouchableOpacity style={styles.botao} onPress={() => { sendApiContent }}>
+            {loading?
+              
+              <TouchableOpacity style={styles.botao}>
+              <ActivityIndicator style={{justifyContent:'center', alignSelf:'center'}} size="small" color="#fff" />
+            </TouchableOpacity>
+              : 
+              <TouchableOpacity style={styles.botao} onPress={() => { sendApiContent() }}>
               <Text style={styles.botaoTexto}>Salvar</Text>
             </TouchableOpacity>
+            
+            }
           </View>
               <View style={styles.listaHeader}>
                 <Text style={styles.listaTexto}>Despesas</Text>
@@ -131,7 +140,7 @@ function ListaComponent({...props}){
               {despesas &&
                 <FlatList
                     data={despesas}
-                    ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma receita.</Text>}
+                    ListEmptyComponent={<Text style={{alignSelf:'center', color:'#999'}}>Não existe nenhuma despesa.</Text>}
                     //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                     //onEndReached={loadClientes}
                     //onEndReachedThreshold={0.2}            
@@ -199,7 +208,7 @@ function ListaComponent({...props}){
   
     listaHeader:{
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
   
       width: 300,
       // backgroundColor: 'blue',

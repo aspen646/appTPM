@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Alert, FlatList} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList, ActivityIndicator} from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import { Header } from '../components/Header';
 import api from '../services/api';
 
 export default function Receita() {
-  const [real, setReal] = useState("");
   const [receita, setReceita] = useState();
+  const [real, setReal] = useState("");
+  const [nome, setNome] = useState("");
+  const [handleReload, setHandleReload] = useState(true);
+  const [loading, setLoading] = useState(false);
 
 //   function ListaComponent(props){
   
@@ -28,7 +31,7 @@ export default function Receita() {
 
 useEffect(() =>{
   loadApiContent();
-},[]);
+},[handleReload]);
 
 async function loadApiContent(){
 let dataResponse = [];
@@ -51,6 +54,32 @@ api.get(
 });
 }
 
+async function sendApiContent(){
+  if(loading){
+    return;
+  }
+
+  if(nome == "" || real == ""){
+    return;
+  }
+
+  setLoading(true);
+
+  let toApi = {
+    nome : nome,
+    valor : real
+  };
+
+  api.post(`receita/cadastro/`,toApi)
+  .then(() =>{
+      setNome('');
+      setReal('');
+      setHandleReload(handleReload? false : true);
+      setLoading(false);
+  })
+}
+
+
 function ListaComponent({...props}){
   return(
       <View style={styles.listaHeader}>
@@ -65,7 +94,12 @@ function ListaComponent({...props}){
       <Header texto="Receita" />
       <View style={styles.container}>
         <View style={styles.conteudo}>
-          <TextInput placeholderTextColor="#999" style={styles.input} placeholder="Receita" />
+          <TextInput 
+          value={nome}
+          onChangeText={(text => setNome(text))}
+          placeholderTextColor="#999" 
+          style={styles.input} 
+          placeholder="Receita" />
           <TextInputMask
               type={'money'}
               options={{
@@ -83,9 +117,17 @@ function ListaComponent({...props}){
               keyboardType='decimal-pad'
               style={styles.input}
               />
-          <TouchableOpacity style={styles.botao} onPress={() => { }}>
-            <Text style={styles.botaoTexto}>Salvar</Text>
-          </TouchableOpacity>
+          {loading?
+              
+              <TouchableOpacity style={styles.botao}>
+              <ActivityIndicator style={{justifyContent:'center', alignSelf:'center'}} size="small" color="#fff" />
+            </TouchableOpacity>
+              : 
+              <TouchableOpacity style={styles.botao} onPress={() => { sendApiContent() }}>
+              <Text style={styles.botaoTexto}>Salvar</Text>
+            </TouchableOpacity>
+            
+            }
         </View>
             <View style={styles.listaHeader}>
               <Text style={styles.listaTexto}>Receitas</Text>
@@ -162,7 +204,7 @@ const styles = StyleSheet.create({
 
   listaHeader:{
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
 
     width: 300,
     // backgroundColor: 'blue',

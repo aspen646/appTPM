@@ -1,10 +1,24 @@
 {
-  "name": "app",
-  "displayName": "app",
+  "name": "SysREP",
+  "displayName": "SysREP",
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "SysREP",
+    "slug": "SysREP",
+    "platforms": [
+      "android"
+    ],
+    "android": {
+      "package": "com.roussistemas.sysrep",
+      "versionCode": 1
+    },
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/wallet.png",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#313131"
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
